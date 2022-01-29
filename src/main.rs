@@ -1,8 +1,8 @@
 use iced::{
     alignment, button, executor, time, window, Alignment, Application, Button, Column,
-    Command, Container, Element, Length, Row, Settings, Subscription, Text, Background,
+    Command, Container, Element, Length, Row, Settings, Subscription, Text,
 };
-use std::{time::{Duration, Instant}, str::Matches};
+use std::time::{Duration, Instant};
 
 pub fn main() -> iced::Result {
     Pomodoro::run(Settings {
@@ -15,7 +15,7 @@ pub fn main() -> iced::Result {
     })
 }
 
-const FORTY_MINS_IN_SECS: u64 = 10;
+const FORTY_MINS_IN_SECS: u64 = 2400;
 
 struct Pomodoro {
     count_down: Duration,
@@ -125,14 +125,14 @@ impl Application for Pomodoro {
         let toggle_button = {
             let (label, color) = match self.state {
                 State::Idle => ("Start", style::Button::Primary),
-                State::Ticking { .. } => ("Stop", style::Button::Destructive),
+                State::Ticking { .. } => ("Stop", style::Button::Secondary),
             };
 
             button(&mut self.toggle, label, color).on_press(Message::Toggle)
         };
 
         let reset_button =
-            button(&mut self.reset, "Reset", style::Button::Secondary)
+            button(&mut self.reset, "Reset", style::Button::Destructive)
                 .on_press(Message::Reset);
 
         let controls = Row::new()
@@ -145,6 +145,7 @@ impl Application for Pomodoro {
             .spacing(20)
             .push(duration)
             .push(controls);
+    
 
         Container::new(content)
             .width(Length::FillPortion(50))
@@ -173,8 +174,8 @@ mod style {
             button::Style {
                 background: Some(Background::Color(match self {
                     Button::Primary => Color::from_rgb(0.44, 0.34, 0.89),
-                    Button::Secondary => Color::from_rgb(1.11, 0.92, 1.93),
-                    Button::Destructive => Color::from_rgb(0.23, 0.17, 0.45),
+                    Button::Secondary => Color::from_rgb(0.59, 0.23, 0.99),
+                    Button::Destructive => Color::from_rgb(0.40, 0.16, 0.66),
                 })),
                 border_radius: 12.0,
                 shadow_offset: Vector::new(1.0, 1.0),
@@ -190,7 +191,7 @@ mod style {
         fn style(&self) -> container::Style {
             container::Style {
                 background: Some(Background::Color(Color::from_rgb(
-                    0.20, 0.07, 0.33,
+                    0.10, 0.04, 0.16,
                 ))),
                 text_color: Some(Color::WHITE),
                 ..container::Style::default()
