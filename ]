@@ -54,7 +54,7 @@ impl Application for Pomodoro {
     fn new(_flags: ()) -> (Pomodoro, Command<Message>) {
         (
             Pomodoro {
-                count_down: Duration::from_secs(POMODORO_TIME),
+                count_down: Duration::from_secs(FORTY_MINS_IN_SECS),
                 state: State::Idle,
                 toggle: button::State::new(),
                 reset: button::State::new(),
@@ -96,7 +96,7 @@ impl Application for Pomodoro {
                 _ => {}
             },
             Message::Reset => {
-                self.count_down = Duration::from_secs(POMODORO_TIME);
+                self.count_down = Duration::from_secs(FORTY_MINS_IN_SECS);
             },
             Message::SetTime => {
             },
