@@ -92,12 +92,6 @@ impl Application for Pomodoro {
                     self.count_down -= now - *last_tick;
                     *last_tick = now;
 
-                    // let activity: f32 = user.activity.parse().expect("PARSE");
-
-                    // user.activity = format!("{}", self.count_down.as_secs_f32() + activity);
-
-                    // self.storage.update(&user).expect("update UPDATE");
-
                     if self.count_down.as_secs().eq(&0) {
                         self.count_down = Duration::from_secs(POMODORO_TIME);
                         self.state = State::Idle;
@@ -148,10 +142,6 @@ impl Application for Pomodoro {
             seconds % MINUTE,
         ))
         .size(75);
-
-        // let user = self.storage.get().expect("view GET");
-        // let activity = Text::new(user.activity)
-        //     .size(15);
 
         let button = |state, label, style| {
             Button::new(
