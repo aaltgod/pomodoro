@@ -1,3 +1,5 @@
+pub mod storage;
+
 use iced::{
     alignment, button, executor, time, window, Alignment, Application, Button, Column,
     Command, Container, Element, Length, Row, Settings, Subscription, Text,
@@ -20,6 +22,7 @@ const SHORT_BREAK_TIME: u64 = 300;
 const LONG_BREAK_TIME: u64 = 900;
 
 struct Pomodoro {
+    storage: storage::Storage,
     count_down: Duration,
     state: State,
     toggle: button::State,
@@ -54,6 +57,7 @@ impl Application for Pomodoro {
     fn new(_flags: ()) -> (Pomodoro, Command<Message>) {
         (
             Pomodoro {
+                storage: storage::Storage::new("storage.json").expect("Storage"),
                 count_down: Duration::from_secs(POMODORO_TIME),
                 state: State::Idle,
                 toggle: button::State::new(),
@@ -87,7 +91,13 @@ impl Application for Pomodoro {
                 State::Ticking { last_tick } => {
                     self.count_down -= now - *last_tick;
                     *last_tick = now;
-                     
+
+                    // let activity: f32 = user.activity.parse().expect("PARSE");
+
+                    // user.activity = format!("{}", self.count_down.as_secs_f32() + activity);
+
+                    // self.storage.update(&user).expect("update UPDATE");
+
                     if self.count_down.as_secs().eq(&0) {
                         self.count_down = Duration::from_secs(POMODORO_TIME);
                         self.state = State::Idle;
@@ -127,6 +137,9 @@ impl Application for Pomodoro {
         const MINUTE: u64 = 60;
         const HOUR: u64 = 60 * MINUTE;
 
+        let user = storage::User{username: "aalt".to_string(), activity: "2.5".to_string()};
+        self.storage.update(&user).expect("view UPDATE");
+
         let seconds = self.count_down.as_secs();
 
         let duration = Text::new(format!(
@@ -135,6 +148,10 @@ impl Application for Pomodoro {
             seconds % MINUTE,
         ))
         .size(75);
+
+        // let user = self.storage.get().expect("view GET");
+        // let activity = Text::new(user.activity)
+        //     .size(15);
 
         let button = |state, label, style| {
             Button::new(
